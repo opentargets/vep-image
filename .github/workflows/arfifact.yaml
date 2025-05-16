@@ -1,0 +1,62 @@
+name: Build and push to Artifact Registry
+
+on:
+  workflow_dispatch:
+
+env:
+  PROJECT_ID: open-targets-eu-dev
+  REGION: europe-west1
+  REPOSITORY: vep
+
+jobs:
+  build-push-artifact:
+    runs-on: ubuntu-latest
+    steps: 
+      - uses: "actions/checkout@v3"
+
+      - name: Authenticate to Google Cloud
+        id: auth-google
+        uses: google-github-actions/auth@v2
+        with:
+          token_format: access_token
+          project_id: ${{ env.PROJECT_ID }}
+          workload_identity_provider: projects/426265110888/locations/global/workloadIdentityPools/github-actions/providers/opentargets
+          service_account: github-actions@open-targets-eu-dev.iam.gserviceaccount.com
+          access_token_lifetime: 300s
+
+      - name: Login to Google Artifact Registry
+        id: auth-gar
+        uses: docker/login-action@v3
+        if: steps.auth-google.outcome == 'success'
+        with:
+          registry: ${{ env.PROJECT_ID }}.pkg.dev
+          username: oauth2accesstoken
+          password: ${{ steps.auth-google.outputs.access_token }}
+
+      - name: Get image version
+        id: tag
+        shell: bash
+        run: |
+          echo "Building image with $(make version) tag"
+          make version >> $GITHUB_ENV
+      
+      - name: Build and push Docker image
+        id: push
+        uses: docker/build-push-action@v6
+        if: steps.tag.outcome == 'success' && steps.auth-gar.outcome == 'success'
+        with:
+          platforms: linux/amd64
+          push: true
+          tags: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJET_ID}}/${{ env.REPOSITORY }}/custom_ensembl_vep:${{ env.TAG}}
+          context: .
+          file: Dockerfile
+
+      - name: Generate artifact attestation
+        id: generate-attestations
+        uses: actions/attest-build-provenance@v1
+        with:
+          subject-name: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJET_ID}}/${{ env.REPOSITORY }}/custom_ensembl_vep:${{ env.TAG}}
+          subject-digest: ${{ steps.push.outputs.digest }}
+          push-to-registry: true
+
+
