@@ -35,7 +35,7 @@ jobs:
         uses: docker/login-action@v3
         if: steps.auth-google.outcome == 'success'
         with:
-          registry: ${{ env.REGION }}.pkg.dev
+          registry: ${{ env.REGION }}-docker.pkg.dev
           username: oauth2accesstoken
           password: ${{ steps.auth-google.outputs.access_token }}
 
