@@ -10,12 +10,12 @@ env:
 
 jobs:
   build-push-artifact:
+    name: Build and push Docker image to Artifact Registry
     permissions:
-      packages: write
       contents: read
       attestations: write
       id-token: write
-    runs-on: ubuntu-latest
+    runs-on: ubuntu=22.04
     steps: 
       - uses: "actions/checkout@v3"
 
