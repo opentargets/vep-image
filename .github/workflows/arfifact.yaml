@@ -20,7 +20,6 @@ jobs:
     steps: 
       - uses: "actions/checkout@v3"
 
-
       - name: Authenticate to Google Cloud
         id: auth-google
         uses: google-github-actions/auth@v2
@@ -36,7 +35,7 @@ jobs:
         uses: docker/login-action@v3
         if: steps.auth-google.outcome == 'success'
         with:
-          registry: ${{ env.PROJECT_ID }}.pkg.dev
+          registry: ${{ env.REGION }}.pkg.dev
           username: oauth2accesstoken
           password: ${{ steps.auth-google.outputs.access_token }}
 
