@@ -36,13 +36,13 @@ CACHE_DIR='path to local folder'
 ENSEMBL_RELEASE='114'
 
 mkdir -p ${CACHE_DIR}
-cd $_
+cd ${CACHE_DIR}
 
 # Clone VEP plugins, check out release:
 git clone https://github.com/Ensembl/VEP_plugins 
 cd VEP_plugins
 git checkout ${ENSEMBL_RELEASE}
-cd ..
+cd ${CACHE_DIR}
 
 # Download cache: 
 wget "https://ftp.ensembl.org/pub/release-${ENSEMBL_RELEASE}/variation/indexed_vep_cache/homo_sapiens_vep_${ENSEMBL_RELEASE}_GRCh38.tar.gz" -P ${CACHE_DIR}/
@@ -50,7 +50,7 @@ wget "https://ftp.ensembl.org/pub/release-${ENSEMBL_RELEASE}/variation/indexed_v
 # Extract tar:
 tar xzf homo_sapiens_vep_${ENSEMBL_RELEASE}_GRCh38.tar.gz
 
-# Some fo the plugins/offline options require the access to fasta file:
+# Some of the plugins/offline options require the access to fasta file:
 wget https://ftp.ensembl.org/pub/release-${ENSEMBL_RELEASE}/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz -P ${CACHE_DIR}/
 gzip -d Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz
 bgzip Homo_sapiens.GRCh38.dna.primary_assembly.fa
