@@ -8,13 +8,14 @@ env:
   REGION: europe-west1
   REPOSITORY: vep
 
+permissions:
+  contents: read
+  attestations: write
+  id-token: write
+
 jobs:
   build-push-artifact:
     name: Build and push Docker image to Artifact Registry
-    permissions:
-      contents: read
-      attestations: write
-      id-token: write
     runs-on: ubuntu-22.04
     steps: 
       - uses: "actions/checkout@v3"
