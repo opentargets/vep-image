@@ -8,7 +8,6 @@ env:
   REGION: europe-west1
   REPOSITORY: vep
 
-
 jobs:
   build-push-artifact:
     name: Build and push Docker image to Artifact Registry
@@ -53,15 +52,17 @@ jobs:
         with:
           platforms: linux/amd64
           push: true
-          tags: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID}}/${{ env.REPOSITORY }}/custom_ensembl_vep:${{ env.TAG}}
+          tags: |
+            ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID}}/${{ env.REPOSITORY }}/custom_ensembl_vep:${{ env.TAG }}
           context: .
           file: Dockerfile
 
       - name: Generate artifact attestation
+        if: steps.push.outcome == 'success'
         id: generate-attestations
         uses: actions/attest-build-provenance@v1
         with:
-          subject-name: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID}}/${{ env.REPOSITORY }}/custom_ensembl_vep:${{ env.TAG}}
+          subject-name: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID}}/${{ env.REPOSITORY }}/custom_ensembl_vep
           subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true
 
