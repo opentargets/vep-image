@@ -8,21 +8,18 @@ env:
   REGION: europe-west1
   REPOSITORY: vep
 
-permissions:
-  contents: read
-  attestations: write
-  id-token: write
 
 jobs:
   build-push-artifact:
     name: Build and push Docker image to Artifact Registry
     runs-on: ubuntu-22.04
+    permissions:
+      contents: read
+      attestations: write
+      id-token: write
     steps: 
       - uses: "actions/checkout@v3"
 
-      - name: debugEnv
-        run: |
-          env | grep ACTIONS_ID
 
       - name: Authenticate to Google Cloud
         id: auth-google
@@ -48,7 +45,7 @@ jobs:
         shell: bash
         run: |
           echo "Building image with $(make version) tag"
-          make version >> $GITHUB_ENV
+          echo "TAG=$(make version) >> $GITHUB_ENV
       
       - name: Build and push Docker image
         id: push
