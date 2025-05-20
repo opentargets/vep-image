@@ -1,6 +1,9 @@
 
 FROM ensemblorg/ensembl-vep:release_114.0
 
+LABEL maintainer="opentargets"
+LABEL description="VEP with LoFTEE and Samtools"
+
 USER root
 
 RUN apt-get update && apt-get -y install \

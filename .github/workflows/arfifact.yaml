@@ -2,6 +2,9 @@ name: Build and push to Artifact Registry
 
 on:
   workflow_dispatch:
+  push:
+    branches:
+      - main
 
 env:
   PROJECT_ID: open-targets-eu-dev
@@ -56,6 +59,30 @@ jobs:
             ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID}}/${{ env.REPOSITORY }}/custom_ensembl_vep:${{ env.TAG }}
           context: .
           file: Dockerfile
+
+      - name: Create a new tag for the image
+        id: create-tag
+        if: steps.push.outcome == 'success'
+        shell: bash
+        run: |
+          echo "TAG=$(make version)" >> $GITHUB_ENV
+          git config --local user.name "GitHub Actions"
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git tag -a ${{ env.TAG }} -m "Tagging the image with version ${{ env.TAG }}"
+          git push origin ${{ env.TAG }}
+          echo "Pushed the tag ${{ env.TAG }} to the repo"
+
+      - name: Create a new release
+        if: steps.create-tag.outcome.success
+        id: create-release
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        run: >-
+          gh release create
+          --draft
+          --repo ${{ github.repository }}
+          --title ${{ env.TAG }}
+          ${{ env.TAG }}
 
       - name: Generate artifact attestation
         if: steps.push.outcome == 'success'
