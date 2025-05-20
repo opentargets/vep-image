@@ -45,7 +45,7 @@ jobs:
         shell: bash
         run: |
           echo "Building image with $(make version) tag"
-          echo "TAG=$(make version) >> $GITHUB_ENV
+          echo "TAG=$(make version)" >> $GITHUB_ENV
       
       - name: Build and push Docker image
         id: push
