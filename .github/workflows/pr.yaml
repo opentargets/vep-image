@@ -12,6 +12,10 @@ jobs:
   fetch-version:
     name: Fetch the ensembl VEP image version
     runs-on: ubuntu-22.04
+    permissions:
+      contents: write
+      pull-requests: write
+      id-token: write
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3

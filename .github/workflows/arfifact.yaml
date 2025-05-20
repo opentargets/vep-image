@@ -16,7 +16,7 @@ jobs:
     name: Build and push Docker image to Artifact Registry
     runs-on: ubuntu-22.04
     permissions:
-      contents: read
+      contents: write
       attestations: write
       id-token: write
     steps: 
