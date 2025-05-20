@@ -53,7 +53,7 @@ jobs:
         with:
           platforms: linux/amd64
           push: true
-          tags: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJET_ID}}/${{ env.REPOSITORY }}/custom_ensembl_vep:${{ env.TAG}}
+          tags: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID}}/${{ env.REPOSITORY }}/custom_ensembl_vep:${{ env.TAG}}
           context: .
           file: Dockerfile
 
@@ -61,7 +61,7 @@ jobs:
         id: generate-attestations
         uses: actions/attest-build-provenance@v1
         with:
-          subject-name: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJET_ID}}/${{ env.REPOSITORY }}/custom_ensembl_vep:${{ env.TAG}}
+          subject-name: ${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID}}/${{ env.REPOSITORY }}/custom_ensembl_vep:${{ env.TAG}}
           subject-digest: ${{ steps.push.outputs.digest }}
           push-to-registry: true
 
