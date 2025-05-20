@@ -73,7 +73,7 @@ jobs:
           echo "Pushed the tag ${{ env.TAG }} to the repo"
 
       - name: Create a new release
-        if: steps.create-tag.outcome.success
+        if: steps.create-tag.outcome == 'success'
         id: create-release
         env:
           GITHUB_TOKEN: ${{ github.token }}
