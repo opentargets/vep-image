@@ -53,7 +53,7 @@ jobs:
         shell: bash
         run: |
           echo "Checking if the tag already exists"
-          if [ -z $(git tag -l "${{ env.TAG }}") ]; then
+          if git rev-parse --verify ${{ env.TAG }} > /dev/null 2>&1; then
             echo "TAG_EXISTS=false" >> $GITHUB_ENV
           else
             echo "TAG_EXISTS=true" >> $GITHUB_ENV
