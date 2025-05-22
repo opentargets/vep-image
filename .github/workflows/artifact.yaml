@@ -53,13 +53,16 @@ jobs:
         shell: bash
         run: |
           echo "Checking if the tag already exists"
-          TAG_EXISTS=$(git tag -l "${{ env.TAG }}")
-          echo "TAG_EXISTS=$TAG_EXISTS" >> $GITHUB_ENV
+          if [ -z $(git tag -l "${{ env.TAG }}") ]; then
+            echo "TAG_EXISTS=false" >> $GITHUB_ENV
+          else
+            echo "TAG_EXISTS=true" >> $GITHUB_ENV
+          fi
 
       - name: Build and push Docker image
         id: push
         uses: docker/build-push-action@v6
-        if: steps.tag.outcome == 'success' && steps.auth-gar.outcome == 'success' && env.TAG_EXISTS == ''
+        if: steps.tag.outcome == 'success' && steps.auth-gar.outcome == 'success' && env.TAG_EXISTS == 'false'
         with:
           platforms: linux/amd64
           push: true
