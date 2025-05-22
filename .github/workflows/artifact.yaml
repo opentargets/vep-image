@@ -59,7 +59,7 @@ jobs:
       - name: Build and push Docker image
         id: push
         uses: docker/build-push-action@v6
-        if: steps.tag.outcome == 'success' && steps.auth-gar.outcome == 'success' && steps.check-tag.outputs.TAG_EXISTS == ''
+        if: steps.tag.outcome == 'success' && steps.auth-gar.outcome == 'success' && env.TAG_EXISTS == ''
         with:
           platforms: linux/amd64
           push: true
