@@ -20,5 +20,5 @@ update:
 extract-so-terms:
 	
 	@echo "Extracting so terms from ensembl-variation"
-	@./so_terms/extract_so_terms.pm
+	@./extract_so_terms.pm
 
