@@ -65,3 +65,21 @@ gsutil -m cp -r ${CACHE_DIR}/homo_sapiens ${CACHE_TARGET_GCP}/
 gsutil -m cp ${CACHE_DIR}/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz ${CACHE_TARGET_GCP}/
 gsutil -m cp ${CACHE_DIR}/gerp_conservation_scores.homo_sapiens.GRCh38.bw ${CACHE_TARGET_GCP}/
 ```
+
+## SO terms with VEP ranking
+
+To ensure the compatibility of SO terms used by gentropy to annotate the consequence score we need to use the same scoring as one introduced by [ensembl-vep](https://github.com/Ensembl/ensembl-vep). The ranking of SO terms is derived from the [Constants.pm ensembl-variation module](https://github.com/Ensembl/ensembl-variation/blob/release/114/modules/Bio/EnsEMBL/Variation/Utils/Constants.pm).
+
+> [!NOTE]
+> The score for the $ith$ SO term is based on the VEP ranking with following formula:
+> $$ score_{i} = 1 - (rank_{i} / rank_{max}) $$
+> The score is an inverse of the ranking to make sure, that high scores are linked to most severe consquences.
+
+To calculate the table with *SO_terms* one must pre-install per5 and the latest [ensembl-variation](https://www.ensembl.org/info/docs/api/api_installation.html) module.
+
+Run the following script to obtain the `so_terms.tsv`
+
+```{bash}
+make extract-so-terms
+# the output is saved to the `so_terms.tsv` file
+```
