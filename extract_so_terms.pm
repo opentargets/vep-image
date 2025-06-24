@@ -11,15 +11,9 @@ my @consequences = grep { defined $_->{rank} && $_->{rank} =~ /^\d+$/ } values %
 my @sorted = sort { $a->{rank} <=> $b->{rank} } @consequences;
 
 # Get max rank from the last sorted element with a valid rank
-my $max_rank = 0;
-for (my $i = $#sorted; $i >= 0; $i--) {
-    if (defined $sorted[$i]{rank} && $sorted[$i]{rank} =~ /^\d+$/) {
-        $max_rank = $sorted[$i]{rank};
-        last;
-    }
-}
+my $max_rank = $sorted[-1]{rank};
 
-# Calculate the score based on the formla: score = 1 - (rank / max_rank)
+# Calculate the score based on the formula: score = 1 - (rank / max_rank)
 sub calculate_score {
     my ($rank, $max_rank) = @_;
     die "Invalid rank or max_rank: rank=$rank, max_rank=$max_rank\n"
