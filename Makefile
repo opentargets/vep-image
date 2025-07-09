@@ -17,3 +17,8 @@ update:
 	new_version=$$(make --silent latest-vep-version); \
 	$(SED_INPLACE) "s%$$old_version%$$new_version%1" Dockerfile
 
+extract-so-terms:
+	
+	@echo "Extracting so terms from ensembl-variation"
+	@./extract_so_terms.pm
+
