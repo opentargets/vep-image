@@ -36,7 +36,7 @@ jobs:
           echo "Current version is $CURRENT_VERSION"
 
       - name: Configure git
-        if:  steps.id.get-version.outcome == 'success' && env.LATEST_VERSION != env.CURRENT_VERSION
+        if:  env.LATEST_VERSION != env.CURRENT_VERSION
         id: configure-git
         shell: bash
         run: |
@@ -44,7 +44,7 @@ jobs:
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
       - name: Update vep docker base image version
-        if: steps.id.configure-git.outcome == 'success' && env.LATEST_VERSION != env.CURRENT_VERSION
+        if: env.LATEST_VERSION != env.CURRENT_VERSION
         id: update-version
         shell: bash
         run: |
@@ -57,7 +57,7 @@ jobs:
           git push --set-upstream origin update-vep-version
 
       - name: Create a PR
-        if: steps.id.update-version.outcome == 'success' && env.LATEST_VERSION != env.CURRENT_VERSION
+        if: env.LATEST_VERSION != env.CURRENT_VERSION
         id: create-pr
         shell: bash
         run: |
