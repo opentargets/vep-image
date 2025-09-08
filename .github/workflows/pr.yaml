@@ -67,7 +67,7 @@ jobs:
         shell: bash
         run: |
           echo "Creating a PR to update the vep version"
-          gh pr create --base main --head update-vep-version --title "Update the ensembl VEP image version to ${{ env.LATEST_VERSION }}" --body "This PR updates the ensembl VEP image version to ${{ env.LATEST_VERSION }}. The current version is ${{ env.CURRENT_VERSION }}."
+          gh pr create --base main --head update-vep-version --title "build(version): update the ensembl VEP image version to ${{ env.LATEST_VERSION }}" --body "This PR updates the ensembl VEP image version to ${{ env.LATEST_VERSION }}. The current version is ${{ env.CURRENT_VERSION }}."
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
