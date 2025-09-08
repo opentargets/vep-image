@@ -1,4 +1,4 @@
-SED_INPLACE = $(shell [[ "$$(uname)" == "Darwin" ]] && echo "sed -i ''" || echo "sed -i")
+SED_INPLACE = $(shell if [ "$$(uname)" = "Darwin" ]; then echo "sed -i ''"; else echo "sed -i"; fi)
 
 version: 
 	@echo $$(grep -m 1 FROM Dockerfile | cut -d ':' -f 2) | sed 's%\/%_%g'
