@@ -1,5 +1,5 @@
 
-FROM ensemblorg/ensembl-vep:release_114.0
+FROM ensemblorg/ensembl-vep:release_115.0
 
 LABEL maintainer="opentargets"
 LABEL description="VEP with LoFTEE and Samtools"
