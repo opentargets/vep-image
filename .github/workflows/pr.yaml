@@ -49,11 +49,15 @@ jobs:
         shell: bash
         run: |
           echo "Creating a PR to update the vep version"
+          # Remove previous branch update-vep-version
+          git branch -D update-vep-version
+          git push -D origin update-vep-version
+          # Recreate the branch
           git checkout -b update-vep-version
           make update
           git add Dockerfile
           git commit -m "Update the ensembl VEP image version to ${{ env.LATEST_VERSION }}"
-          git push --set-upstream origin update-vep-version
+          git push --force --set-upstream origin update-vep-version 
 
       - name: Create a PR
         if: ${{ env.LATEST_VERSION != env.CURRENT_VERSION }}
