@@ -53,11 +53,11 @@ jobs:
         shell: bash
         run: |
           echo "Checking if the tag already exists"
-          if git rev-parse --verify ${{ env.TAG }} > /dev/null 2>&1; then
-            echo "TAG_EXISTS=false" >> $GITHUB_ENV
+          if git show-ref --tags --quiet "refs/tags/${{ env.TAG }}"; then
+            echo "TAG_EXISTS=true" >> $GITHUB_ENV
             echo "Tag ${{ env.TAG }} already exists, skipping the build"
           else
-            echo "TAG_EXISTS=true" >> $GITHUB_ENV
+            echo "TAG_EXISTS=false" >> $GITHUB_ENV
             echo "Tag ${{ env.TAG }} does not exist, proceeding with the build"
           fi
 
