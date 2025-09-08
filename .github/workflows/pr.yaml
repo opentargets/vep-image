@@ -49,9 +49,10 @@ jobs:
         shell: bash
         run: |
           echo "Creating a PR to update the vep version"
-          # Remove previous branch update-vep-version
-          git branch -D update-vep-version
-          git push -D origin update-vep-version
+          # if branch exists, remove previous branch update-vep-version
+          
+          git branch -D update-vep-version || echo "Branch update-vep-version does not exist"
+          git push -D origin update-vep-version || echo "Branch update-vep-version does not exist on remote"
           # Recreate the branch
           git checkout -b update-vep-version
           make update
