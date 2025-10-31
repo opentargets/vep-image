@@ -33,7 +33,8 @@ As each Ensembl release has its own VEP release, the underlying cache data needs
 #!/usr/bin/env bash
 
 CACHE_DIR='path to local folder'
-ENSEMBL_RELEASE='114'
+ENSEMBL_RELEASE='115'
+CACHE_TARGET_GCP
 
 mkdir -p ${CACHE_DIR}
 cd ${CACHE_DIR}
@@ -41,7 +42,7 @@ cd ${CACHE_DIR}
 # Clone VEP plugins, check out release:
 git clone https://github.com/Ensembl/VEP_plugins 
 cd VEP_plugins
-git checkout ${ENSEMBL_RELEASE}
+git checkout "release/${ENSEMBL_RELEASE}"
 cd ${CACHE_DIR}
 
 # Download cache: 
@@ -56,14 +57,14 @@ gzip -d Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz
 bgzip Homo_sapiens.GRCh38.dna.primary_assembly.fa
 
 # For GERP conservation scores the relevant bw file is needed:
-wget https://ftp.ensembl.org/pub/release-${ENSEMBL_RELEASE}/compara/conservation_scores/91_mammals.gerp_conservation_score/gerp_conservation_scores.homo_sapiens.GRCh38.bw -P ${CACHE_DIR}/
+wget https://ftp.ensembl.org/pub/release-${ENSEMBL_RELEASE}/compara/conservation_scores/92_mammals.gerp_conservation_score/gerp_conservation_scores.homo_sapiens.GRCh38.bw -P ${CACHE_DIR}/
 
 
 # Move datasets to GCP:
-gsutil -m cp -r ${CACHE_DIR}/VEP_plugins ${CACHE_TARGET_GCP}/
-gsutil -m cp -r ${CACHE_DIR}/homo_sapiens ${CACHE_TARGET_GCP}/
-gsutil -m cp ${CACHE_DIR}/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz ${CACHE_TARGET_GCP}/
-gsutil -m cp ${CACHE_DIR}/gerp_conservation_scores.homo_sapiens.GRCh38.bw ${CACHE_TARGET_GCP}/
+gcloud storage cp -r ${CACHE_DIR}/VEP_plugins ${CACHE_TARGET_GCP}/
+gcloud storage cp -r ${CACHE_DIR}/homo_sapiens ${CACHE_TARGET_GCP}/
+gcloud storage cp ${CACHE_DIR}/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz ${CACHE_TARGET_GCP}/
+gcloud storage cp ${CACHE_DIR}/gerp_conservation_scores.homo_sapiens.GRCh38.bw ${CACHE_TARGET_GCP}/
 ```
 
 ## SO terms with VEP ranking
