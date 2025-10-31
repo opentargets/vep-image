@@ -55,6 +55,7 @@ tar xzf homo_sapiens_vep_${ENSEMBL_RELEASE}_GRCh38.tar.gz
 wget https://ftp.ensembl.org/pub/release-${ENSEMBL_RELEASE}/fasta/homo_sapiens/dna/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz -P ${CACHE_DIR}/
 gzip -d Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz
 bgzip Homo_sapiens.GRCh38.dna.primary_assembly.fa
+samtools faidx Homo_sapiens.GRCh38.dna.primary_assembly.fa
 
 # For GERP conservation scores the relevant bw file is needed:
 wget https://ftp.ensembl.org/pub/release-${ENSEMBL_RELEASE}/compara/conservation_scores/92_mammals.gerp_conservation_score/gerp_conservation_scores.homo_sapiens.GRCh38.bw -P ${CACHE_DIR}/
@@ -65,6 +66,8 @@ gcloud storage cp -r ${CACHE_DIR}/VEP_plugins ${CACHE_TARGET_GCP}/
 gcloud storage cp -r ${CACHE_DIR}/homo_sapiens ${CACHE_TARGET_GCP}/
 gcloud storage cp ${CACHE_DIR}/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz ${CACHE_TARGET_GCP}/
 gcloud storage cp ${CACHE_DIR}/gerp_conservation_scores.homo_sapiens.GRCh38.bw ${CACHE_TARGET_GCP}/
+gcloud storage cp ${CACHE_DIR}/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz.fai ${CACHE_TARGET_GCP}/
+gcloud storage cp ${CACHE_DIR}/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz.gzi ${CACHE_TARGET_GCP}/
 ```
 
 ## SO terms with VEP ranking
