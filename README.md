@@ -62,7 +62,7 @@ wget https://ftp.ensembl.org/pub/release-${ENSEMBL_RELEASE}/compara/conservation
 
 # For the contig index
 samtools faidx Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz
-echo -e "contig\tstart\tend" > grch38.primary.chrom.bed
+echo -e "id\tstart\tend\tcanonical\tdatasourceId" > grch38.primary.chrom.bed
 awk '{print $1"\t0\t"$2}' Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz.fai >> grch38.primary.chrom.bed
 
 # Move datasets to GCP:
