@@ -34,7 +34,7 @@ As each Ensembl release has its own VEP release, the underlying cache data needs
 
 CACHE_DIR='path to local folder'
 ENSEMBL_RELEASE='115'
-CACHE_TARGET_GCP
+CACHE_TARGET_GCP=""
 
 mkdir -p ${CACHE_DIR}
 cd ${CACHE_DIR}
@@ -60,6 +60,10 @@ samtools faidx Homo_sapiens.GRCh38.dna.primary_assembly.fa
 # For GERP conservation scores the relevant bw file is needed:
 wget https://ftp.ensembl.org/pub/release-${ENSEMBL_RELEASE}/compara/conservation_scores/92_mammals.gerp_conservation_score/gerp_conservation_scores.homo_sapiens.GRCh38.bw -P ${CACHE_DIR}/
 
+# For the contig index
+samtools faidx Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz
+echo -e "contig\tstart\tend" > grch38.primary.chrom.bed
+awk '{print $1"\t0\t"$2}' Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz.fai >> grch38.primary.chrom.bed
 
 # Move datasets to GCP:
 gcloud storage cp -r ${CACHE_DIR}/VEP_plugins ${CACHE_TARGET_GCP}/
@@ -68,6 +72,7 @@ gcloud storage cp ${CACHE_DIR}/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz ${
 gcloud storage cp ${CACHE_DIR}/gerp_conservation_scores.homo_sapiens.GRCh38.bw ${CACHE_TARGET_GCP}/
 gcloud storage cp ${CACHE_DIR}/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz.fai ${CACHE_TARGET_GCP}/
 gcloud storage cp ${CACHE_DIR}/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz.gzi ${CACHE_TARGET_GCP}/
+gcloud storage cp ${CACHE_DIR}/grch38.primary.chrom.bed ${CACHE_TARGET_GCP}/
 ```
 
 ## SO terms with VEP ranking
@@ -75,6 +80,7 @@ gcloud storage cp ${CACHE_DIR}/Homo_sapiens.GRCh38.dna.primary_assembly.fa.gz.gz
 To ensure the compatibility of SO terms used by gentropy to annotate the consequence score we need to use the same scoring as one introduced by [ensembl-vep](https://github.com/Ensembl/ensembl-vep). The ranking of SO terms is derived from the [Constants.pm ensembl-variation module](https://github.com/Ensembl/ensembl-variation/blob/release/114/modules/Bio/EnsEMBL/Variation/Utils/Constants.pm).
 
 ### Score from ranking
+
 The score for the $ith$ SO term is based on the VEP ranking with following formula:
 
 $$ score_{i} = 1 - (rank_{i} / rank_{max}) $$
